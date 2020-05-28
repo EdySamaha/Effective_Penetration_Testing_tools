@@ -52,11 +52,11 @@ def ScanPort(target, port, threading=False):
 def seqScanPorts(target): #sequential scan
     print("Scanning for open ports...")
     for port in portRange:
-        if(ScanPort(target,port)==0): #if returned by any exception
+        if(ScanPort(target,port)==0): #if returned by any major exception
             break
 
 def threadScanPorts(target):
-    threads = []        # To run TCP_connect concurrently
+    threads = []        # To run ScanPort concurrently
 
     # Spawning threads to scan ports
     for i in portRange:
@@ -70,11 +70,6 @@ def threadScanPorts(target):
     # Locking the main thread until all threads complete
     for i in portRange:
         threads[i-portRange[0]].join()
-
-def ShowResults():
-    print("All open ports found:")
-    for i in openPorts:
-        print("Port",i,"OPEN")
 
 def ping(host):
     """
@@ -125,6 +120,10 @@ def getportRange():
         print("Please enter Integers")
         getportRange()
 
+def ShowResults():
+    print("All open ports found:")
+    for i in openPorts:
+        print("Port",i,"OPEN")
 #endregion
 
 #RUN HERE
@@ -144,6 +143,8 @@ if (usethreads):
     threadScanPorts(target)
 else:
     seqScanPorts(target)
-ShowResults()
+openPorts.sort()
 
-print("Time taken", datetime.now()-start_time)
+print("All Open ports found:\n",openPorts) #ShowResults()
+
+print("Time taken:", datetime.now()-start_time)
