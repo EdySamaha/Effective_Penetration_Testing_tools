@@ -5,9 +5,10 @@ import platform    # For getting the operating system name
 import subprocess  # For executing a shell command
 
 #Default:
-portRange=range(0, 1000) #(inclusive, exclusive)
+portRange=range(0, 65535+1) #(inclusive, exclusive)
 timeout=1 #sec
 target=""
+maxthread=5000
 
 #region FUNCTIONS
 openPorts=[]
@@ -57,7 +58,7 @@ def seqScanPorts(target): #sequential scan
 
 def threadScanPorts(target):
     threads = []        # To run ScanPort concurrently
-
+    threadcount=0
     # Spawning threads to scan ports
     for i in portRange:
         t = threading.Thread(target=ScanPort, args=(target, i, True))
@@ -66,10 +67,12 @@ def threadScanPorts(target):
     # Starting threads
     for i in portRange:
         threads[i-portRange[0]].start() #-range[0] in case starting from port>0
-
-    # Locking the main thread until all threads complete
-    for i in portRange:
-        threads[i-portRange[0]].join()
+        threadcount+=1
+        if(threadcount>=maxthread):
+            # Locking the main thread until all threads complete
+            for j in range(i-maxthread+1, i+1):
+                threads[j-portRange[0]].join() #waits until selected thread is complete
+            threadcount=0
 
 def ping(host):
     """
@@ -95,7 +98,7 @@ def getTarget():
     target= input('Enter target IP or Hostname: ')
     try:
         target_ip= socket.gethostbyname(target)
-        #CHECK IF HOST 19IS REACHABLE
+        #CHECK IF HOST IS REACHABLE
         if(ping(target_ip)==False):
             print('Host Not responding')
             getTarget()
@@ -128,11 +131,24 @@ def ShowResults():
 
 #RUN HERE
 getTarget()
-getportRange()
-q= input("Use Multithreading (Recommended) yes[1]/no[0]:").lower()
+
+q= input("Scan ALL[1] ports or Range[0]? ")
+q= ''.join(e for e in q if(e not in string.whitespace and e not in string.punctuation))
+if (q=="0"):
+    getportRange()
+
+q= input("Use Multithreading (Recommended) yes[1]/no[0]: ").lower()
 q= ''.join(e for e in q if(e not in string.whitespace and e not in string.punctuation))
 if (q=="yes" or q=="y" or q=="1"):
     usethreads=True
+    #Get max thread number
+    maxthread=input("Enter the maximum number of threads to run. NOTE: The higher the number the more load on your device\nNum: ")
+    while(type(maxthread)!=int):
+        try:
+            maxthread=int(maxthread)
+        except:
+            print("Please enter an integer")
+            maxthread=input("Enter the maximum number of threads to run: ")
 else:
     usethreads=False
 print(usethreads)

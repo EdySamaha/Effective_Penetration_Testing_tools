@@ -15,13 +15,13 @@ def geturl():
     url = input("Please enter a URL: ")
     if(not url.startswith(('http://','https://'))):
         url = 'https://'+url
-    #print(url)
+    print("Connecting to",url,"...")
     try:
         #print(socket.gethostbyaddr(url)) #returns url from ip address #PROBLEM: gets a weird server url instead of hostname that we want
         page = requests.get(url, timeout=3)
         soup = BeautifulSoup(page.content, "html.parser")
     except requests.exceptions.ConnectionError:
-        print("Error: Cannot connect to the website")
+        print("Error: Cannot connect to",url)
         geturl()
         return
         #exit() #quits script but keeps console open
