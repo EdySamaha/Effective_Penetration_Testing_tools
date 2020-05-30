@@ -1,4 +1,4 @@
-# Automated Penetration Testing tools
+# Effective Penetration Testing tools
 A collection of tools that can be used to test for potential security flaws in your systems.
 
 ## Contents
