@@ -25,7 +25,11 @@ Run the script in your console by writing `python myWebPathFinder.py`
 Then input the required parameters
 
 ## Web Fingerprint
-Work in progress. Finds headers in website.
+Work in progress. Finds technologies and headers used in a website.
+
+#### Usage:
+Run the script in your console by writing `python WebFingerprint.py`
+Then input the required parameters
 
 
 # Disclaimer

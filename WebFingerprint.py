@@ -1,15 +1,17 @@
 import requests
 
 target_headers = [
-    'Server', 'uid','id','user','username', 'q', 
-    'password', 'pin',
-    'Via', 'X-Powered-By', 'X-Country-Code'
+    'Server', 'method', 
+    'uid','id','user','username', 'q', 
+    'password', 'pass', 'pin',
+    'Via', 'X-Powered-By', 'X-Country-Code', 'cookie', 'set-cookie'
     ]
 
 #region FUNCTIONS
 url, req='',''
 def findHttpHeaders(url):
-    print("Headers found:\n",req.headers)
+    #print("\nHeaders sent:\n",req.request.headers)
+    print("\nHeaders received:\n",req.headers)
     print("\nTargeted headers found:")
     for header in target_headers:
         try:

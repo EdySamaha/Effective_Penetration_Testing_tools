@@ -5,6 +5,7 @@ admin
 administrator
 api
 apis
+app
 changelog
 clients
 customer
@@ -35,7 +36,12 @@ robots.txt
 root
 server
 settings
+src
 temp
+templates
 user
 users
 webadmin
+wp-admin
+wp-content
+wp-includes

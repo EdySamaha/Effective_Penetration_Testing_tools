@@ -142,13 +142,17 @@ q= ''.join(e for e in q if(e not in string.whitespace and e not in string.punctu
 if (q=="yes" or q=="y" or q=="1"):
     usethreads=True
     #Get max thread number
-    maxthread=input("Enter the maximum number of threads to run. NOTE: The higher the number the more load on your device\nNum: ")
+    print("Enter the maximum number of threads to run. NOTE: The higher the number the more load on your device")
+    q=input("(default is "+str(maxthread)+") Num: ")
+    if (q!=''):     #default chosen
+        maxthread=q
     while(type(maxthread)!=int):
         try:
             maxthread=int(maxthread)
         except:
             print("Please enter an integer")
             maxthread=input("Enter the maximum number of threads to run: ")
+    #print(maxthread)
 else:
     usethreads=False
 print(usethreads)
