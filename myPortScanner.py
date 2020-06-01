@@ -3,6 +3,7 @@ import re, string
 from datetime import datetime
 import platform    # For getting the operating system name
 import subprocess  # For executing a shell command
+from tld import get_tld #needs url with http://
 
 #Default:
 portRange=range(0, 65535+1) #(inclusive, exclusive)
@@ -95,7 +96,12 @@ def ping(host):
 
 def getTarget():
     global target
-    target= input('Enter target IP or Hostname: ')
+    target_url= input('Enter target IP or Hostname: ')
+    target=target_url
+    if(target.startswith(('http://','https://'))):
+        target=target.replace('https://','')
+        target=target.replace('http://','')
+
     try:
         target_ip= socket.gethostbyname(target)
         #CHECK IF HOST IS REACHABLE
@@ -106,6 +112,15 @@ def getTarget():
         print("Target:  ", target,'at',target_ip)
         target= target_ip
     except:
+        try: #get IP from domain
+            res = get_tld(target_url, as_object=True)
+            domain = res.domain
+            temp= domain +'.'+str(res)
+            ip= socket.gethostbyname(temp)  #needs input without http:// and with only domain
+            print(temp,ip)
+            return
+        except Exception:# as e:
+            pass #print(e)
         print("invalid IP address")
         getTarget()
 

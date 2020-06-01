@@ -1,6 +1,8 @@
 # Effective Penetration Testing tools
 A collection of tools that can be used to test for potential security flaws in your systems.
 
+Install dependencies by running `pip install -r requirements.txt` in your console
+
 ## Contents
 * [Disclaimer](#disclaimer)
 * Reconnaissance tools

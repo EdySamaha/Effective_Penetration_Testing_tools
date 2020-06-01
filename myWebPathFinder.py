@@ -1,8 +1,9 @@
 from bs4 import BeautifulSoup
-import requests #,socket
-import re, string
+import requests ,socket
+import re, string, sys
+from tld import get_tld #needs url with http://
 
-url, soup ='',''
+url, soup, ip, domain ='','','',''
 headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36',
 		'Accept': '*/*'}
 internal = []
@@ -11,15 +12,27 @@ hiddenpaths=[]
 
 #region FUNCTIONS
 def geturl():
-    global url, soup
+    global url, soup, ip, domain
     url = input("Please enter a URL: ")
     if(not url.startswith(('http://','https://'))):
         url = 'https://'+url
+        
     print("Connecting to",url,"...")
     try:
         #print(socket.gethostbyaddr(url)) #returns url from ip address #PROBLEM: gets a weird server url instead of hostname that we want
         page = requests.get(url, timeout=3)
         soup = BeautifulSoup(page.content, "html.parser")
+        try: #get domain and IP
+            res = get_tld(url, as_object=True)
+            domain = res.domain
+            temp= domain +'.'+str(res)
+            ip= socket.gethostbyname(temp)  #needs input without http:// and with only domain
+            print(temp,ip)
+        except Exception as e:
+            domain="NOT FOUND"
+            ip="Result"
+            print(e)
+
     except requests.exceptions.ConnectionError:
         print("Error: Cannot connect to",url)
         geturl()
@@ -40,10 +53,12 @@ def extractLinks(URL):
             continue
         else:
             x = re.search("^/", link.get('href'))
-            if x is None:
-                referral.append(link.get('href'))
+            if x is None:       # if the link does not start with '/'
+                if link.get('href') not in referral: #avoid dups
+                    referral.append(link.get('href'))
             else:
-                internal.append(link.get('href'))
+                if link.get('href') not in internal:
+                    internal.append(link.get('href'))
 
 def dirBruteForce(url, wordlist):
     if url[-1]!='/':
@@ -58,6 +73,21 @@ def dirBruteForce(url, wordlist):
                     hiddenpaths.append(line.replace('\n', ""))
             except:
                 continue
+
+def Output():
+    f = open(ip+"_paths.txt", "w")
+    f.write("Url: "+url+"\nDomain: "+domain+"\nIP: "+ip+'\n')
+    f.write("\nInternal links:\n")
+    for i in internal:
+        f.write(i+'\n')
+    f.write("\nReferal links:\n")
+    for i in referral:
+        f.write(i+'\n')
+    f.write("\nHidden paths found:\n")
+    for i in hiddenpaths:
+        f.write(i+'\n')
+
+    f.close()
 #endregion
 
 #RUN HERE
@@ -88,3 +118,4 @@ if(searchHidden):
     dirBruteForce(url, wordlist)
     print(hiddenpaths)
 
+Output()
