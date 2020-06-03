@@ -145,41 +145,43 @@ def ShowResults():
 #endregion
 
 #RUN HERE
-getTarget()
+if __name__ == "__main__":
+    getTarget()
 
-q= input("Scan ALL[1] ports or Range[0]? ")
-q= ''.join(e for e in q if(e not in string.whitespace and e not in string.punctuation))
-if (q=="0"):
-    getportRange()
+    q= input("Scan ALL[1] ports or Range[0]? ")
+    q= ''.join(e for e in q if(e not in string.whitespace and e not in string.punctuation))
+    if (q=="0"):
+        getportRange()
 
-q= input("Use Multithreading (Recommended) yes[1]/no[0]: ").lower()
-q= ''.join(e for e in q if(e not in string.whitespace and e not in string.punctuation))
-if (q=="yes" or q=="y" or q=="1"):
-    usethreads=True
-    #Get max thread number
-    print("Enter the maximum number of threads to run. NOTE: The higher the number the more load on your device")
-    q=input("(default is "+str(maxthread)+") Num: ")
-    if (q!=''):     #default chosen
-        maxthread=q
-    while(type(maxthread)!=int):
-        try:
-            maxthread=int(maxthread)
-        except:
-            print("Please enter an integer")
-            maxthread=input("Enter the maximum number of threads to run: ")
-    #print(maxthread)
-else:
-    usethreads=False
-print(usethreads)
+    q= input("Use Multithreading (Recommended) yes[1]/no[0]: ").lower()
+    q= ''.join(e for e in q if(e not in string.whitespace and e not in string.punctuation))
+    if (q=="yes" or q=="y" or q=="1"):
+        usethreads=True
+        #Get max thread number
+        print("Enter the maximum number of threads to run. NOTE: The higher the number the more load on your device")
+        q=input("(default is "+str(maxthread)+") Num: ")
+        if (q!=''):     #default chosen
+            maxthread=q
+        while(type(maxthread)!=int):
+            try:
+                maxthread=int(maxthread)
+            except:
+                print("Please enter an integer")
+                maxthread=input("Enter the maximum number of threads to run: ")
+        #print(maxthread)
+    else:
+        usethreads=False
+    print(usethreads)
 
-start_time=datetime.now()
-print("Started at",start_time)
-if (usethreads):
-    threadScanPorts(target)
-else:
-    seqScanPorts(target)
-openPorts.sort()
+    start_time=datetime.now()
+    print("Started at",start_time)
+    if (usethreads):
+        threadScanPorts(target)
+    else:
+        seqScanPorts(target)
+    openPorts.sort()
 
-print("All Open ports found:\n",openPorts) #ShowResults()
+    print("All Open ports found:\n",openPorts) #ShowResults()
 
-print("Time taken:", datetime.now()-start_time)
+    print("Time taken:", datetime.now()-start_time)
+    

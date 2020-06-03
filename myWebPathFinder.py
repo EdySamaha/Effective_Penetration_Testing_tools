@@ -92,30 +92,31 @@ def Output():
 
 #RUN HERE
 wordlist='defaultPathWordlist.txt' #Change this string for different file name or path
-geturl()
+if __name__ == "__main__":
+    geturl()
 
-print("Getting links...")
-extractLinks(url)
-print("\nINTERNAL:")
-print(internal)
-print("\nREFERRAL: ")
-print(referral)
+    print("Getting links...")
+    extractLinks(url)
+    print("\nINTERNAL:")
+    print(internal)
+    print("\nREFERRAL: ")
+    print(referral)
 
-q= input("\nSearch for hidden paths? (NOT Recommended) yes[1]/no[0]: ").lower()
-q= ''.join(e for e in q if(e not in string.whitespace and e not in string.punctuation))
-if (q=="yes" or q=="y" or q=="1"):
-    q= input("\nWARNING: Trying to brute force directories and files names on deployed servers is ILLEGAL!\nDo you still wish to continue? (AT YOUR OWN RISK) Yes/No: ").lower()
+    q= input("\nSearch for hidden paths? (NOT Recommended) yes[1]/no[0]: ").lower()
     q= ''.join(e for e in q if(e not in string.whitespace and e not in string.punctuation))
-    if (q=="yes"):
-        searchHidden=True
+    if (q=="yes" or q=="y" or q=="1"):
+        q= input("\nWARNING: Trying to brute force directories and files names on deployed servers is ILLEGAL!\nDo you still wish to continue? (AT YOUR OWN RISK) Yes/No: ").lower()
+        q= ''.join(e for e in q if(e not in string.whitespace and e not in string.punctuation))
+        if (q=="yes"):
+            searchHidden=True
+        else:
+            searchHidden=False
     else:
         searchHidden=False
-else:
-    searchHidden=False
-print(searchHidden)
+    print(searchHidden)
 
-if(searchHidden):
-    dirBruteForce(url, wordlist)
-    print(hiddenpaths)
+    if(searchHidden):
+        dirBruteForce(url, wordlist)
+        print(hiddenpaths)
 
-Output()
+    Output()

@@ -43,5 +43,6 @@ def geturl():
 #endregion
 
 #RUN HERE
-geturl()
-findHttpHeaders(url)
+if __name__ == "__main__":
+    geturl()
+    findHttpHeaders(url)
