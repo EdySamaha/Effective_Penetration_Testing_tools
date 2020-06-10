@@ -1,3 +1,4 @@
-bs4>=0.0.1
-requests>=2.22.0
-tld>=0.12.2
+requests==2.22.0
+tld==0.12.2
+beautifulsoup4==4.9.1
+pyOpenSSL==19.1.0

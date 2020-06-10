@@ -20,7 +20,7 @@ Install dependencies by running `pip install -r requirements.txt` in your consol
 Supports Multi-threading, Windows and Linux OS, user-friendly. Shows open ports in desired range of any hostname/ip inputted
 
 #### Usage:
-Run the script in your console by writing `python myPortScanner.py`
+Run the script in your console by writing `python PortScanner.py`
 Then input the required parameters
 
 ## Web Path Finder
@@ -29,7 +29,7 @@ Extracts all links from a website.
 Can also search for hidden paths using `defaultPathWordlist.txt`. However, beware that brute-forcing directories and files names on deployed servers is ILLEGAL and can get you in trouble.
 
 #### Usage:
-Run the script in your console by writing `python myWebPathFinder.py`
+Run the script in your console by writing `python WebPathFinder.py`
 Then input the required parameters
 
 ## Web Fingerprint
@@ -40,7 +40,7 @@ Run the script in your console by writing `python WebFingerprint.py`
 Then input the required parameters
 
 ## Traffic Maze
-Masks traffic by going through proxies and mixing headers.
+Work in progress. Masks traffic by going through proxies and mixing headers.
 
 #### Usage:
 NOTE: This script is ONLY useful when imported and used in other scripts.
