@@ -3,25 +3,26 @@ import requests ,socket
 import re, string, sys
 from tld import get_tld #needs url with http://
 
-url, soup, ip, domain ='','','',''
+wordlist='defaultPathWordlist.txt' #Change this string for different file name or path
+
+#region FUNCTIONS
+url, req, ip, domain ='','','',''
 headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36',
 		'Accept': '*/*'}
 internal = []
 referral = []
 hiddenpaths=[]
 
-#region FUNCTIONS
 def geturl():
-    global url, soup, ip, domain
+    global url, req, ip, domain
     url = input("Please enter a URL: ")
     if(not url.startswith(('http://','https://'))):
-        url = 'https://'+url
+        url = 'http://'+url
         
     print("Connecting to",url,"...")
     try:
         #print(socket.gethostbyaddr(url)) #returns url from ip address #PROBLEM: gets a weird server url instead of hostname that we want
-        page = requests.get(url, timeout=3)
-        soup = BeautifulSoup(page.content, "html.parser")
+        req = requests.get(url, timeout=3)
         try: #get domain and IP
             res = get_tld(url, as_object=True)
             domain = res.domain
@@ -47,7 +48,8 @@ def geturl():
         return
 
 
-def extractLinks(URL):
+def extractLinks(req):
+    soup = BeautifulSoup(req.content, "html.parser")
     for link in soup.findAll('a'):
         if link.get('href') is None:
             continue
@@ -60,7 +62,7 @@ def extractLinks(URL):
                 if link.get('href') not in internal:
                     internal.append(link.get('href'))
 
-def dirBruteForce(url, wordlist):
+def dirBruteForce(url, wordlist=wordlist):
     if url[-1]!='/':
         url+='/'
     with open(wordlist, 'r') as f:
@@ -88,15 +90,20 @@ def Output():
         f.write(i+'\n')
 
     f.close()
+
+def WebPaths(req,dirBruteForce=False):
+    extractLinks(req)
+    if(dirBruteForce):
+        dirBruteForce(url)
+    Output()
 #endregion
 
 #RUN HERE
-wordlist='defaultPathWordlist.txt' #Change this string for different file name or path
 if __name__ == "__main__":
     geturl()
 
     print("Getting links...")
-    extractLinks(url)
+    extractLinks(req)
     print("\nINTERNAL:")
     print(internal)
     print("\nREFERRAL: ")

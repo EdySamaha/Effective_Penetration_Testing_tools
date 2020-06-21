@@ -4,7 +4,7 @@ import requests, random, string, time
 from itertools import cycle #cycles through a set infinitely
 
 #region FUNCTIONS
-proxyPool= {"a",'b',1,'1',"1",2,2,"2",'2'} #set only keeps unique inputs, and is unordered
+proxyPool= set() #set only keeps unique inputs, and is unordered
 headerPool= set()
 
 def getProxyPool():
@@ -57,11 +57,11 @@ def generatePools():
 def hide_local(): #obfuscates your packets inside network
     return
 
-def useTrafficMaze(function, delay=0, stopiter=10):
+def useTrafficMaze(function, args=(), kwargs={}, delay=0, stopiter=10):
     itercounter=0
     for i in cycle(proxyPool):
         itercounter+=1
-        execute = function()
+        execute = function(*args,**kwargs)
         print(i)
         if (itercounter>=stopiter):
             break
@@ -74,6 +74,4 @@ if __name__ == "__main__":
     # getProxyPool()
     print(proxyPool)
 
-    def ahmad():
-        print('walaa')
-    useTrafficMaze(ahmad, 1)
+    #useTrafficMaze()

@@ -9,7 +9,7 @@ from tld import get_tld #needs url with http://
 portRange=range(0, 65535+1) #(inclusive, exclusive)
 timeout=1 #sec
 target=""
-maxthread=5000
+maxthread=6500
 
 #region FUNCTIONS
 openPorts=[]
@@ -57,7 +57,7 @@ def seqScanPorts(target): #sequential scan OUTDATED
         if(ScanPort(target,port)==0): #if returned by any major exception
             break
 
-def threadScanPorts(target):
+def threadScanPorts(target, maxthread=maxthread, portRange=portRange):
     threads = []        # To run ScanPort concurrently
     threadcount, joinedthread =0,0
     # Spawning threads to scan ports
@@ -80,6 +80,9 @@ def threadScanPorts(target):
     while((len(threads)-1) >=joinedthread):
         threads[joinedthread].join()
         joinedthread+=1
+    
+    openPorts.sort()
+    return openPorts
 
 def ping(host):
     """
@@ -175,9 +178,7 @@ if __name__ == "__main__":
 
     start_time=datetime.now()
     print("Started at",start_time)
-    threadScanPorts(target)
-
-    openPorts.sort()
+    openPorts = threadScanPorts(target,maxthread,portRange)
 
     print("All Open ports found:\n",openPorts) #ShowResults()
 

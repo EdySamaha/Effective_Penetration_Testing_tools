@@ -17,7 +17,7 @@ def geturl():
     url=input("Url to fingerprint: ")
     domain=url
     if(not url.startswith(('http://','https://'))):
-        url = 'https://'+url
+        url = 'http://'+url
     else:
         domain=domain.replace('https://','')
         domain=domain.replace('http://','')
@@ -46,7 +46,7 @@ def geturl():
         geturl()
         return
 
-def findHttpHeaders(url):
+def findHttpHeaders(req):
     #print("\nHeaders sent:\n",req.request.headers)
     print("\nHeaders received:\n",req.headers)
     #print("\nTargeted headers found:")
@@ -80,11 +80,16 @@ def Output():
     for key,value in result.items():
         print('%s: %s' % (key, value))
 
+def WebPrint(req=req,domain=domain):
+    sslCheck(domain)
+    findHttpHeaders(req)
+    Output()
+
 #endregion
 
 #RUN HERE
 if __name__ == "__main__":
     geturl()
     sslCheck(domain)
-    findHttpHeaders(url)
+    findHttpHeaders(req)
     Output()

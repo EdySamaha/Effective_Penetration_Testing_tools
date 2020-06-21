@@ -50,21 +50,22 @@ Inside a python script:
 import TrafficMaze
 
 #create the function you want
-def tempfunction():
+def tempfunction(a,b):
     return
 #then call 
-TrafficMaze.useTrafficMaze(tempfunction)
+TrafficMaze.useTrafficMaze(tempfunction, args=(a,b))
 ```
 
 ## Web Input Tester
-Work in progress. Gets all forms and inputs from a specified url, then tests these inputs with a list of payloads for potential vulnerabilities.
+Work in progress. Gets all forms and inputs from a specified url, then tests these inputs with a list of payloads from `WebInput_payloads.txt` for potential vulnerabilities.
 
 #### Usage:
 Run the script in your console by writing `python WebInputTest.py`
 Then input the required parameters
 
 ## Automated
-Soon...
+Soon... Runs all desired scripts in an automated fashion and generates a report with results acquired. You can modify the Configuration Bools inside the script to select what scripts to run.
+You only have to input the target after running `python Automated.py` in console.
 
 
 # Disclaimer
