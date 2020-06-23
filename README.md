@@ -43,17 +43,18 @@ Then input the required parameters
 Work in progress. Masks traffic by going through proxies and mixing headers.
 
 #### Usage:
-NOTE: This script is ONLY useful when imported and used in other scripts.
+NOTE: This script is ONLY useful when imported and used in other scripts. And the function called MUST contain "proxy" and "headers" parameters WITHOUT passing them in the "args" or "kwargs" fields, as shown below.
 
 Inside a python script: 
 ```python
-import TrafficMaze
+import TrafficMaze, requests
 
 #create the function you want
-def tempfunction(a,b):
-    return
+def tempfunction(url, proxy,headers):
+    req=requests.get(url, proxies=proxy,headers=headers)
+    print(req.content)
 #then call 
-TrafficMaze.useTrafficMaze(tempfunction, args=(a,b))
+TrafficMaze.useTrafficMaze(tempfunction, args=(url))
 ```
 
 ## Web Input Tester
@@ -64,7 +65,7 @@ Run the script in your console by writing `python WebInputTest.py`
 Then input the required parameters
 
 ## Automated
-Soon... Runs all desired scripts in an automated fashion and generates a report with results acquired. You can modify the Configuration Bools inside the script to select what scripts to run.
+Runs all desired scripts in an automated fashion and generates a report with results acquired. You can modify the Configuration Bools inside the script to select what scripts to run.
 You only have to input the target after running `python Automated.py` in console.
 
 

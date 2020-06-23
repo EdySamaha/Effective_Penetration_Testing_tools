@@ -80,7 +80,7 @@ def Output():
     for key,value in result.items():
         print('%s: %s' % (key, value))
 
-def WebPrint(req=req,domain=domain):
+def WebPrint(req,domain): #used in Automated
     sslCheck(domain)
     findHttpHeaders(req)
     Output()

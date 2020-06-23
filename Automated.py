@@ -8,7 +8,7 @@ from TrafficMaze import useTrafficMaze
 from PortScanner import threadScanPorts
 from WebFingerprint import WebPrint
 from WebPathFinder import WebPaths
-# from WebInputTest import WebInputs
+from WebInputTest import WebInputs
 
 #region CONFIGURATION_BOOLS
 """Configure the bools below to run the appropriate automated scripts
@@ -21,12 +21,12 @@ _webfingerprint=True
 _webPathscan=True
 _dirBruteForce=False #WARNING: brute forcing on deployed servers is ILLEGAL and can get you in trouble.
 # Exploitation
-_webinputTest=False
+_webinputTest=True
 
 #endregion
 
 #region Target_info
-target_ip,domain,req='','',''
+target_url,target_ip,domain,req='','','',''
 def ping(host):
     """
     Returns True if host (str) responds to a ping request.
@@ -48,7 +48,7 @@ def ping(host):
 
 
 def getTarget():
-    global target_ip, domain, req
+    global target_url,target_ip, domain, req
     target_url= input('Enter target IP or Hostname: ')
     #Filtering Target
     target=target_url
@@ -109,11 +109,11 @@ openPorts=''
 
 def Automated():
     global openPorts
-    # if(_portscan):
-    #     try:
-    #         openPorts = threadScanPorts(target_ip, maxthread=32200) #, portRange=range(11,500)
-    #     except Exception as e:
-    #         print("ERROR: Couldn't perform Port Scan\n",e)
+    if(_portscan):
+        try:
+            openPorts = threadScanPorts(target_ip, maxthread=32200) #, portRange=range(11,500)
+        except Exception as e:
+            print("ERROR: Couldn't perform Port Scan\n",e)
     if(_webfingerprint):
         try:
             WebPrint(req, domain)
@@ -121,14 +121,14 @@ def Automated():
             print("ERROR: Couldn't perform Web Fingerprinting\n",e)
     if(_webPathscan):
         try:
-            WebPaths(req,_dirBruteForce)
+            WebPaths(target_url,req,_dirBruteForce)
         except Exception as e:
             print("ERROR: Couldn't perform Web Path Finding\n",e)
-    # if(_webinputTest):
-    #     try:
-    #         WebInputs()
-    #     except Exception as e:
-    #         print("ERROR: Couldn't perform Web Input Testing\n",e)
+    if(_webinputTest):
+        try:
+            WebInputs(target_url,req)
+        except Exception as e:
+            print("ERROR: Couldn't perform Web Input Testing\n",e)
     
 
 def Report(): #NOTE: Need to also pass params in Output() of each imported function to correctly name text files
@@ -141,6 +141,7 @@ def Report(): #NOTE: Need to also pass params in Output() of each imported funct
 
 #RUN HERE
 results_dirname="Results"
+print("WARNING: THE USE OF THIS SCRIPT ON SYSTEMS YOU DO NOT OWN IS ILLEGAL AND CAN GET YOU IN TROUBLE!")
 if __name__ == "__main__":
     start_time=datetime.now()
     print("Started at",start_time)

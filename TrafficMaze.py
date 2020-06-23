@@ -5,7 +5,21 @@ from itertools import cycle #cycles through a set infinitely
 
 #region FUNCTIONS
 proxyPool= set() #set only keeps unique inputs, and is unordered
-headerPool= set()
+
+accepts = {"Firefox": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+                "Safari, Chrome": "application/xml,application/xhtml+xml,text/html;q=0.9, text/plain;q=0.8,image/png,*/*;q=0.5"}
+useragent=[
+    'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.99 Safari/537.36',
+    'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.99 Safari/537.36',
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.99 Safari/537.36',
+    'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_1) AppleWebKit/602.2.14 (KHTML, like Gecko) Version/10.0.1 Safari/602.2.14',
+    'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.71 Safari/537.36',
+    'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.98 Safari/537.36',
+    'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.98 Safari/537.36',
+    'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.71 Safari/537.36',
+    'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.99 Safari/537.36',
+    'Mozilla/5.0 (Windows NT 10.0; WOW64; rv:50.0) Gecko/20100101 Firefox/5'
+]
 
 def getProxyPool():
     url = 'https://www.sslproxies.org/'    
@@ -28,41 +42,30 @@ def getProxyPool():
             return
 
 
-# def getRandom_Headers():
-#     accepts = {"Firefox": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-#                 "Safari, Chrome": "application/xml,application/xhtml+xml,text/html;q=0.9, text/plain;q=0.8,image/png,*/*;q=0.5"}
-#     user-agent={}
-    
-#     try: 
-#         # Getting a user agent using the fake_useragent package
-#         ua = UserAgent()
-#         if random.random() > 0.5:
-#             random_user_agent = ua.chrome
-#         else:
-#             random_user_agent = ua.firefox
-    
-#             user_agents = ["Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36",
-#             "Mozilla/5.0 (Windows NT 5.1; rv:7.0.1) Gecko/20100101 Firefox/7.0.1"]  # Just for case user agents are not extracted from fake-useragent package
-#         random_user_agent = random.choice(user_agents)
-    
-#     #It's important to match between the user-agent and the accept headers
-#         valid_accept = accepts['Firefox'] if random_user_agent.find('Firefox') > 0 else accepts['Safari, Chrome']
-#         headers = {"User-Agent": random_user_agent,
-#                 "Accept": valid_accept}
-#         return headers
+def getRandom_Headers():
+    rand_useragent= random.choice(useragent)
+    # #It's important to match between the user-agent and the accept headers
+    valid_accept = accepts['Firefox'] if rand_useragent.find('Firefox') > 0 else accepts['Safari, Chrome']
+    headers = {"User-Agent": rand_useragent,
+            "Accept": valid_accept}
+    return headers
 
-def generatePools():
-    return
 
-def hide_local(): #obfuscates your packets inside network
+def hide_local(proxy,headers): #obfuscates your packets inside network
     return
 
 def useTrafficMaze(function, args=(), kwargs={}, delay=0, stopiter=10):
+    getProxyPool()
     itercounter=0
     for i in cycle(proxyPool):
+        headers=getRandom_Headers()
         itercounter+=1
-        execute = function(*args,**kwargs)
-        print(i)
+        try:
+            execute = function(*args,**kwargs, proxy=i,headers=headers)
+        except:
+            print("WARNING: Proxy unable to reach target. Using random headers only.")
+            execute = function(*args,**kwargs, proxy='',headers=headers)
+        # print(i,'\n',headers)
         if (itercounter>=stopiter):
             break
         time.sleep(delay)
@@ -71,7 +74,4 @@ def useTrafficMaze(function, args=(), kwargs={}, delay=0, stopiter=10):
 
 #RUN HERE
 if __name__ == "__main__":
-    # getProxyPool()
-    print(proxyPool)
-
-    #useTrafficMaze()
+    useTrafficMaze(hide_local)

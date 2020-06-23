@@ -91,7 +91,7 @@ def Output():
 
     f.close()
 
-def WebPaths(req,dirBruteForce=False):
+def WebPaths(url,req,dirBruteForce=False): #used in Automated
     extractLinks(req)
     if(dirBruteForce):
         dirBruteForce(url)

