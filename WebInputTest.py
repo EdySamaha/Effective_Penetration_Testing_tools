@@ -55,7 +55,7 @@ def getForms(req):
         resultForms["form"+str(counter)]=details
         counter+=1
 
-def testForms(url):
+def testForms(url, proxy='',headers=''):
     payloadsList=[]
     with open(payloadsf,'r') as f:
         for line in f:#.readlines():
@@ -77,9 +77,9 @@ def testForms(url):
                     try:
                         urli= urljoin(url, v["action"]) #add form action to url requested
                         if(v['method']=='post'):
-                            r=requests.post(urli,data=data)
+                            r=requests.post(urli,data=data, proxies=proxy,headers=headers)
                         else:
-                            r=requests.get(urli,data=data)
+                            r=requests.get(urli,data=data, proxies=proxy,headers=headers)
 
                         if(p in r.content.decode()): #NOT FOR SQL INJECTION SINCE PAGE CHANGES WITHOUT PAYLOAD APPEARING ON PAGE
                             print(k,inp['id'],'is vulnerable to',p)
@@ -93,10 +93,10 @@ def Output():
         f.write(json.dumps(resultForms))
     #f.close() # The file is always closed after the with-scope ends.
 
-def WebInputs(url,req): #used in Automated
+def WebInputs(url,req, proxy='',headers=''): #used in Automated
     getForms(req)
     print(resultForms)
-    testForms(url)
+    testForms(url, proxy,headers)
     # Output()
 #endregion
 

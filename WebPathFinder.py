@@ -7,8 +7,8 @@ wordlist='defaultPathWordlist.txt' #Change this string for different file name o
 
 #region FUNCTIONS
 url, req, ip, domain ='','','',''
-headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36',
-		'Accept': '*/*'}
+# headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36',
+# 		'Accept': '*/*'}
 internal = []
 referral = []
 hiddenpaths=[]
@@ -62,7 +62,7 @@ def extractLinks(req):
                 if link.get('href') not in internal:
                     internal.append(link.get('href'))
 
-def dirBruteForce(url, wordlist=wordlist):
+def dirBruteForce(url, wordlist=wordlist, proxy='',headers=''):
     if url[-1]!='/':
         url+='/'
     with open(wordlist, 'r') as f:
@@ -70,7 +70,7 @@ def dirBruteForce(url, wordlist=wordlist):
             testurl = url + line.replace('\n', "")
             #print(testurl)
             try:
-                testurl = requests.get(testurl, headers=headers, timeout=3)
+                testurl = requests.get(testurl, proxies=proxy,headers=headers, timeout=3)
                 if testurl.status_code ==200:
                     hiddenpaths.append(line.replace('\n', ""))
             except:
@@ -91,10 +91,10 @@ def Output():
 
     f.close()
 
-def WebPaths(url,req,dirBruteForce=False): #used in Automated
+def WebPaths(url,req,dirBruteForce=False, proxy='',headers=''): #used in Automated
     extractLinks(req)
     if(dirBruteForce):
-        dirBruteForce(url)
+        dirBruteForce(url,proxy=proxy,headers=headers)
     Output()
 #endregion
 

@@ -52,12 +52,13 @@ def getRandom_Headers():
 
 
 def hide_local(proxy,headers): #obfuscates your packets inside network
+    print(proxy,'\n',headers,'\n')
     return
 
 def useTrafficMaze(function, args=(), kwargs={}, delay=0, stopiter=10):
     getProxyPool()
     itercounter=0
-    for i in cycle(proxyPool):
+    for i in cycle(proxyPool): #PROBLEM: NEED TO TEST IF PROXY WORKS FIRST
         headers=getRandom_Headers()
         itercounter+=1
         try:
